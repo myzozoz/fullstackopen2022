@@ -4,19 +4,26 @@ const Header = ({title}) => <h1>
   {title}
 </h1>
 
+const StatisticLine = ({text, value}) => <p>{text} {value}</p>
+
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad
-  return (
+  
+  return all > 0 ?  (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {all > 0 ? (good - bad) / all : 0}</p>
-      <p>positive { all > 0 ? (good / all) * 100 : 0} %</p>
+      <StatisticLine text={'good'} value={good}/>
+      <StatisticLine text={'neutral'} value={neutral}/>
+      <StatisticLine text={'bad'} value={bad}/>
+      <StatisticLine text={'all'} value={all}/>
+      <StatisticLine text={'average'} value={all > 0 ? (good - bad) / all : 0}/>
+      <StatisticLine text={'positive'} value={all > 0 ? (good / all) * 100 : 0}/>
     </div>
+  ) : (
+    <p>No feedback given</p>
   )
 }
+
+const Button = ({label, handler}) =>  <button onClick={handler}>{label}</button>
 
 const App = () => {
   // tallenna napit omaan tilaansa
@@ -28,12 +35,11 @@ const App = () => {
   return (
     <div>
       <Header title={'give feedback'}/>
-      <button onClick={()=>setGood(good+1)}>good</button>
-      <button onClick={()=>setNeutral(neutral+1)}>neutral</button>
-      <button onClick={()=>setBad(bad+1)}>bad</button>
+      <Button label={'good'} handler={()=>setGood(good+1)}/>
+      <Button label={'neutral'} handler={()=>setNeutral(neutral+1)}/>
+      <Button label={'bad'} handler={()=>setBad(bad+1)}/>
       <Header title={'statistics'}/>
       <Statistics good={good} neutral={neutral} bad={bad}/>
-
     </div>
   )
 }
