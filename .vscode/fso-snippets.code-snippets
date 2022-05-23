@@ -10,10 +10,19 @@
 	 	"scope": "javascript,typescript",
 	 	"prefix": "clog",
 	 	"body": [
-	 		"console.log('$1');",
+	 		"console.log('$1')",
 	 		"$2"
 	 	],
 		"description": "Log output to console"
-	}
-	
+	},
+	"Print to console with template string": {
+		"scope": "javascript,typescript",
+		"prefix": "tlog",
+		"body": [
+			"console.log(`$1`)",
+			"$2"
+		],
+	 "description": "Log output to console"
+ }
+ 
 }

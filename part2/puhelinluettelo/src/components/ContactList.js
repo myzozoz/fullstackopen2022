@@ -1,7 +1,6 @@
-const Contact = ({contact}) => <p>{contact.name}</p>
+const Contact = ({contact}) => <p>{contact.name} {contact.number}</p>
 
 const ContactList = ({contacts}) => {
-  console.log(contacts)
   return (<div>
     {contacts.map((c, i) => <Contact key={c.name} contact={c}/>)}
   </div>)
