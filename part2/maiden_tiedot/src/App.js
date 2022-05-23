@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const WEATHER_API_KEY=process.env.REACT_APP_WEATHER_API_KEY
+
 const Filter = ({value, changeHandler}) =>
   <div>
     filter: <input 
@@ -16,17 +18,41 @@ const Country = ({country, detailed, showCallback}) =>
         <button onClick={() => showCallback(country.name.common)}>show</button>
       </p>
 
-const CountryDetails = ({country}) => 
-  <div>
-    <h1>{country.name.common}</h1>
-    <p>Capital: {country.capital[0]}</p>
-    <p>Area: {country.area}</p>
-    <h3>Languages:</h3>
-    <ul>
-      {Object.keys(country.languages).map(l => <li key={l}>{country.languages[l]}</li>)}
-    </ul>
-    <img src={country.flags.png} alt='flag'/>
-  </div>
+const CountryDetails = ({country}) => {
+  const [weatherData, setWeatherData] = useState({})
+  useEffect(() => {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${country.latlng[0]}&lon=${country.latlng[1]}&appid=${WEATHER_API_KEY}`)
+      .then(res => {
+        setWeatherData(res.data)
+        console.log(weatherData)
+      })
+  },[])
+
+
+  return (
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>Capital: {country.capital[0]}</p>
+      <p>Area: {country.area}</p>
+      <h3>Languages:</h3>
+      <ul>
+        {Object.keys(country.languages).map(l => <li key={l}>{country.languages[l]}</li>)}
+      </ul>
+      <img src={country.flags.png} alt='flag'/>
+      {
+        weatherData && weatherData.main &&
+        <div>
+          <p>Temperature: {weatherData.main.temp && weatherData.main.temp - 272}</p>
+          <img src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} alt={'weather_icon'}/>
+          <p>Wind: {weatherData.wind.speed} m/s</p>
+        </div>
+      }
+      
+    </div>
+  )
+}
+  
 
 const CountryList = ({countries, showCallback}) => 
   <div>
