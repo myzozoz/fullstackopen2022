@@ -38,7 +38,6 @@ const App = () => {
       .then(response => {
         console.log('response',response)
         setPersons(response.data)
-        
       })
   }, [])
 
