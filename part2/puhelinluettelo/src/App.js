@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import ContactList from './components/ContactList'
 
 const Filter = ({value, changeHandler}) =>
@@ -26,12 +27,20 @@ const InputForm = ({name, number, setName, setNumber, submitHandler}) =>
 </form>
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '050 123 1234'}
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('response',response)
+        setPersons(response.data)
+        
+      })
+  }, [])
 
   const handleButtonPress = (e) => {
     e.preventDefault()

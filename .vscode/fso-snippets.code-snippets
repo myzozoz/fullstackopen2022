@@ -10,8 +10,7 @@
 	 	"scope": "javascript,typescript",
 	 	"prefix": "clog",
 	 	"body": [
-	 		"console.log('$1')",
-	 		"$2"
+	 		"console.log('$1')"
 	 	],
 		"description": "Log output to console"
 	},
@@ -19,8 +18,7 @@
 		"scope": "javascript,typescript",
 		"prefix": "tlog",
 		"body": [
-			"console.log(`$1`)",
-			"$2"
+			"console.log(`$1`)"
 		],
 	 "description": "Log output to console"
  }
