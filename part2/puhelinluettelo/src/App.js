@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import contactService from './services/contacts'
 import ContactList from './components/ContactList'
 
 const Filter = ({value, changeHandler}) =>
@@ -33,11 +33,9 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    contactService.getAll()
       .then(response => {
-        console.log('response',response)
-        setPersons(response.data)
+        setPersons(response)
       })
   }, [])
 
@@ -46,9 +44,17 @@ const App = () => {
     if (persons.map(p => p.name).findIndex(n => n === newName) > -1) {
       window.alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons(persons.concat({name: newName, number: newNumber}))
+      const newPerson = {name: newName, number: newNumber}
+      setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')
+      
+      contactService.create(newPerson)
+        .then(response => {
+          const oldPersons = persons.filter(p => p.id !== response.id)
+          setPersons([...oldPersons, response])
+          //console.log(response)
+        })
     }
   }
 
