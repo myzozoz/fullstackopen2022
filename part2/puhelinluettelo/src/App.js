@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react'
 import contactService from './services/contacts'
 import ContactList from './components/ContactList'
+import './index.css'
+
+const ErrorMessage = ({message}) =>
+  <div className={'error'}>
+    {message}
+  </div>
+
+const SuccessMessage = ({message}) =>
+  <div className='success'>
+    {message}
+  </div>
 
 const Filter = ({value, changeHandler}) =>
   <div>
@@ -31,6 +42,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     contactService.getAll()
@@ -62,6 +75,19 @@ const App = () => {
             serverUpdatedPersons[sup_i] = res
             setPersons(serverUpdatedPersons)
           })
+          .then(() => {
+            setSuccessMessage(`${updatedPerson.name} number updated!`)
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
+          })
+          .catch(err => {
+            setErrorMessage(`Could not update ${updatedPerson.name} number, object might have been moved or deleted from the server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== updatedPerson.id))
+          })
       }
     } else {
       setPersons(persons.concat(newPerson))
@@ -73,6 +99,12 @@ const App = () => {
           const oldPersons = persons.filter(p => p.id !== response.id)
           setPersons([...oldPersons, response])
         })
+        .then(() => {
+          setSuccessMessage(`${newPerson.name} added!`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        })
     }
   }
 
@@ -82,14 +114,21 @@ const App = () => {
       contactService.remove(contact.id)
         .then(res => {
           setPersons(persons.filter(p => p.id !== contact.id))
+        }).catch(err => {
+          setErrorMessage(`Could not delete person ${contact.name}, object might have been moved or deleted from the server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id !== contact.id))
         })
-      
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      {errorMessage && <ErrorMessage message={errorMessage}/>}
+      {successMessage && <SuccessMessage message={successMessage}/>}
       <Filter value={filter} changeHandler={(e) => setFilter(e.target.value)}/>
       <h3>Add new</h3>
       <InputForm name={newName}
