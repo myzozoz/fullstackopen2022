@@ -41,10 +41,29 @@ const App = () => {
 
   const handleButtonPress = (e) => {
     e.preventDefault()
-    if (persons.map(p => p.name).findIndex(n => n === newName) > -1) {
-      window.alert(`${newName} is already added to phonebook`)
+    const newPerson = {name: newName, number: newNumber}
+    const p_i = persons.findIndex(p => p.name === newName)
+    if (p_i  > -1) {
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+        //update number locally
+        const updatedPersons = [...persons]
+        const updatedPerson = {... updatedPersons[p_i], number: newPerson.number}
+        updatedPersons[p_i] = updatedPerson
+        setPersons(updatedPersons)
+        setNewName('')
+        setNewNumber('')
+        //update number on server
+        contactService
+          .update(updatedPerson)
+          .then(res => {
+            //replace local version with update from server
+            const serverUpdatedPersons = [...persons]
+            const sup_i = persons.findIndex(p => p.name === updatedPerson.name)
+            serverUpdatedPersons[sup_i] = res
+            setPersons(serverUpdatedPersons)
+          })
+      }
     } else {
-      const newPerson = {name: newName, number: newNumber}
       setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')

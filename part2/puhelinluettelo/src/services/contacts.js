@@ -4,8 +4,12 @@ const getAll = () => axios
   .get('http://localhost:3001/persons')
   .then(response => response.data)
 
-const create = (newNote) => axios
-  .post('http://localhost:3001/persons', newNote)
+const create = (newPerson) => axios
+  .post('http://localhost:3001/persons', newPerson)
+  .then(response => response.data)
+
+const update = (person) => axios
+  .put(`http://localhost:3001/persons/${person.id}`, person)
   .then(response => response.data)
 
 const remove = (id) => axios
@@ -15,4 +19,4 @@ const remove = (id) => axios
   })
 
 
-export default { getAll, create, remove }
+export default { getAll, create, update, remove }
