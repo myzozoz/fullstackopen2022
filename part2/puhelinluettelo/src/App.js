@@ -53,8 +53,18 @@ const App = () => {
         .then(response => {
           const oldPersons = persons.filter(p => p.id !== response.id)
           setPersons([...oldPersons, response])
-          //console.log(response)
         })
+    }
+  }
+
+  const handleDelete = (contact) => (e) => {
+    e.preventDefault()
+    if (window.confirm(`Delete ${contact.name}?`)) {
+      contactService.remove(contact.id)
+        .then(res => {
+          setPersons(persons.filter(p => p.id !== contact.id))
+        })
+      
     }
   }
 
@@ -70,7 +80,9 @@ const App = () => {
         submitHandler={handleButtonPress}/>
       
       <h2>Numbers</h2>
-      <ContactList  contacts={persons.filter(c => c.name.toLowerCase().includes(filter) || c.number.toLowerCase().includes(filter))} />
+      <ContactList
+        contacts={persons.filter(c => c.name.toLowerCase().includes(filter) || c.number.toLowerCase().includes(filter))}
+        deleteAction={handleDelete}/>
     </div>
   )
 
