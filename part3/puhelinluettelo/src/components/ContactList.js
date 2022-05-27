@@ -1,5 +1,3 @@
-import contactService from '../services/contacts'
-
 const Contact = ({contact, deleteAction}) =>
   <p>
     {contact.name} {contact.number}

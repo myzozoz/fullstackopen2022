@@ -60,7 +60,7 @@ const App = () => {
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
         //update number locally
         const updatedPersons = [...persons]
-        const updatedPerson = {... updatedPersons[p_i], number: newPerson.number}
+        const updatedPerson = {...updatedPersons[p_i], number: newPerson.number}
         updatedPersons[p_i] = updatedPerson
         setPersons(updatedPersons)
         setNewName('')
