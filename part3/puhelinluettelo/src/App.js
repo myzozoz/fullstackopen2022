@@ -90,7 +90,7 @@ const App = () => {
           })
       }
     } else {
-      setPersons(persons.concat(newPerson))
+      
       setNewName('')
       setNewNumber('')
       
@@ -105,6 +105,13 @@ const App = () => {
             setSuccessMessage(null)
           }, 5000)
         })
+        .catch(err => {
+          setErrorMessage(err.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+
+        })
     }
   }
 
@@ -114,7 +121,8 @@ const App = () => {
       contactService.remove(contact.id)
         .then(res => {
           setPersons(persons.filter(p => p.id !== contact.id))
-        }).catch(err => {
+        })
+        .catch(err => {
           setErrorMessage(`Could not delete person ${contact.name}, object might have been moved or deleted from the server`)
           setTimeout(() => {
             setErrorMessage(null)
