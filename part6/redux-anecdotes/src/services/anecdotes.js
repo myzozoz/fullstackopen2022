@@ -22,6 +22,14 @@ const create = async (data) => {
   return response.data
 }
 
-const funcs = { getAll, create }
+const vote = async (anecdote) => {
+  const response = await axios.put(`${baseUrl}/${anecdote.id}`, {
+    ...anecdote,
+    votes: anecdote.votes + 1,
+  })
+  return response.data
+}
+
+const funcs = { getAll, create, vote }
 
 export default funcs
