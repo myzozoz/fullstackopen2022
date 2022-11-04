@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import './index.css'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -14,6 +13,7 @@ import {
   createNewBlog,
   likeBlog,
 } from './reducers/blogReducer'
+import { loginUser, logoutUser, setUser } from './reducers/userReducer'
 
 const Notification = ({ notification }) => (
   <div className={notification.type}>{notification.message}</div>
@@ -25,9 +25,9 @@ const App = () => {
   const blogs = useSelector((state) =>
     state.blogs.slice().sort((a, b) => a.likes - b.likes)
   )
+  const user = useSelector((state) => state.users)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -42,51 +42,23 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      blogService.setToken(user.token)
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      dispatch(
-        setTempMessage(
-          `Successfully logged in! Welcome ${user.name}`,
-          'success',
-          5000
-        )
-      )
-    } catch (exception) {
-      console.log(exception)
-      dispatch(
-        setTempMessage(
-          'Could not log in! Please check username and password.',
-          'error',
-          5000
-        )
-      )
-    }
+    dispatch(loginUser(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = (event) => {
     event.preventDefault()
     console.log('logging out')
 
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-    dispatch(setTempMessage('Logged out', 'success', 5000))
+    dispatch(logoutUser())
   }
 
   const handleBlogSubmit = async (event) => {
