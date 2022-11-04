@@ -8,6 +8,11 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import { setTempMessage } from './reducers/notificationReducer'
+import {
+  initializeBlogs,
+  setBlogs,
+  createNewBlog,
+} from './reducers/blogReducer'
 
 const Notification = ({ notification }) => (
   <div className={notification.type}>{notification.message}</div>
@@ -16,7 +21,7 @@ const Notification = ({ notification }) => (
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notifications)
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector((state) => state.blogs.slice())
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -27,7 +32,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -86,22 +91,10 @@ const App = () => {
     console.log(`submitting new blog ${title}/${author}/${url}`)
     blogFormRef.current.toggleVisibility()
     try {
-      const response = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      setBlogs([...blogs, response])
+      dispatch(createNewBlog({ title, author, url }))
       setTitle('')
       setAuthor('')
       setUrl('')
-      dispatch(
-        setTempMessage(
-          `Successfully added new blog (${response.title} by ${response.author})`,
-          'success',
-          5000
-        )
-      )
     } catch (exception) {
       dispatch(setTempMessage('Could not create new blog!', 'error', 5000))
     }
@@ -117,7 +110,7 @@ const App = () => {
       const i = blogs.findIndex((b) => b.id === updated.id)
       const newBlogs = [...blogs]
       newBlogs[i] = { ...newBlogs[i], likes: updated.likes }
-      setBlogs(newBlogs)
+      dispatch(setBlogs(newBlogs))
     } catch (exception) {
       console.log(exception)
     }
@@ -128,7 +121,7 @@ const App = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
         await blogService.remove(blog.id)
-        setBlogs([...blogs.filter((b) => b.id !== blog.id)])
+        dispatch(setBlogs([...blogs.filter((b) => b.id !== blog.id)]))
         dispatch(
           setTempMessage(
             `Successfully removed blog ${blog.title}!`,
