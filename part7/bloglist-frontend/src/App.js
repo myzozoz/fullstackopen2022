@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Blog from './components/Blog'
+import { Route, Routes } from 'react-router-dom'
 import blogService from './services/blogs'
 import './index.css'
+import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import { setTempMessage } from './reducers/notificationReducer'
 import {
   initializeBlogs,
@@ -13,19 +15,27 @@ import {
   createNewBlog,
   likeBlog,
 } from './reducers/blogReducer'
-import { loginUser, logoutUser, setUser } from './reducers/userReducer'
+import {
+  loginUser,
+  logoutUser,
+  setUser,
+  fetchAllUsers,
+} from './reducers/userReducer'
 
 const Notification = ({ notification }) => (
   <div className={notification.type}>{notification.message}</div>
 )
 
 const App = () => {
+  useEffect(() => {
+    dispatch(fetchAllUsers())
+  }, [])
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notifications)
   const blogs = useSelector((state) =>
     state.blogs.slice().sort((a, b) => a.likes - b.likes)
   )
-  const user = useSelector((state) => state.users)
+  const user = useSelector((state) => state.users.current)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [title, setTitle] = useState('')
@@ -89,7 +99,6 @@ const App = () => {
 
   const blogList = () => (
     <>
-      <p>{user.name} logged in</p>
       <Togglable buttonLabel={'create new'} ref={blogFormRef}>
         <BlogForm
           handleBlogSubmit={handleBlogSubmit}
@@ -133,7 +142,11 @@ const App = () => {
       ) : (
         <>
           <button onClick={handleLogout}>logout</button>
-          {blogList()}
+          <p>{user.name} logged in</p>
+          <Routes>
+            <Route path="/" element={blogList()} />
+            <Route path="/users" element={<Users />} />
+          </Routes>
         </>
       )}
     </div>

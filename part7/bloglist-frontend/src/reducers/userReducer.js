@@ -1,21 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import userService from '../services/users'
 import { setTempMessage } from '../reducers/notificationReducer'
 
-const initialState = null
+const initialState = {
+  current: null,
+  all: [],
+}
 
 const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
     setUser(state, action) {
-      return action.payload
+      state.current = action.payload
+    },
+    setUsers(state, action) {
+      state.all = action.payload
     },
   },
 })
 
-export const { setUser } = userSlice.actions
+export const { setUser, setUsers } = userSlice.actions
 
 export const loginUser = (username, password) => {
   return async (dispatch) => {
@@ -53,6 +60,13 @@ export const logoutUser = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     dispatch(setUser(null))
     dispatch(setTempMessage('Logged out', 'success', 5000))
+  }
+}
+
+export const fetchAllUsers = () => {
+  return async (dispatch) => {
+    const res = await userService.getAll()
+    dispatch(setUsers(res))
   }
 }
 export default userSlice.reducer
