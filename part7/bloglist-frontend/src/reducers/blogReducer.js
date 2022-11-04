@@ -11,13 +11,21 @@ const blogSlice = createSlice({
     setBlogs(state, action) {
       return action.payload
     },
+    setBlog(state, action) {
+      return state.map((blog) =>
+        blog.id === action.payload.id ? action.payload : blog
+      )
+    },
     appendBlog(state, action) {
       state.push(action.payload)
+    },
+    removeBlog(state, action) {
+      return state.filter((blog) => blog.id !== action.payload)
     },
   },
 })
 
-export const { setBlogs, appendBlog } = blogSlice.actions
+export const { setBlogs, setBlog, appendBlog, removeBlog } = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -37,6 +45,38 @@ export const createNewBlog = (blog) => {
         5000
       )
     )
+  }
+}
+
+export const likeBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      const updated = await blogService.update({
+        ...blog,
+        likes: blog.likes + 1,
+      })
+      dispatch(setBlog(updated))
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+}
+
+export const deleteBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      await blogService.remove(blog.id)
+      dispatch(removeBlog(blog.id))
+      dispatch(
+        setTempMessage(
+          `Successfully removed blog ${blog.title}!`,
+          'success',
+          5000
+        )
+      )
+    } catch (exception) {
+      dispatch(setTempMessage('Could not delete blog', 'error', 5000))
+    }
   }
 }
 

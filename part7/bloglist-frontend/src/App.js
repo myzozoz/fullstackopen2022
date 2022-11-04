@@ -10,8 +10,9 @@ import Togglable from './components/Togglable'
 import { setTempMessage } from './reducers/notificationReducer'
 import {
   initializeBlogs,
-  setBlogs,
+  deleteBlog,
   createNewBlog,
+  likeBlog,
 } from './reducers/blogReducer'
 
 const Notification = ({ notification }) => (
@@ -21,7 +22,9 @@ const Notification = ({ notification }) => (
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notifications)
-  const blogs = useSelector((state) => state.blogs.slice())
+  const blogs = useSelector((state) =>
+    state.blogs.slice().sort((a, b) => a.likes - b.likes)
+  )
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -102,36 +105,13 @@ const App = () => {
 
   const handleLike = (blog) => async (event) => {
     event.preventDefault()
-    try {
-      const updated = await blogService.update({
-        ...blog,
-        likes: blog.likes + 1,
-      })
-      const i = blogs.findIndex((b) => b.id === updated.id)
-      const newBlogs = [...blogs]
-      newBlogs[i] = { ...newBlogs[i], likes: updated.likes }
-      dispatch(setBlogs(newBlogs))
-    } catch (exception) {
-      console.log(exception)
-    }
+    dispatch(likeBlog(blog))
   }
 
   const handleDelete = (blog) => async (event) => {
     event.preventDefault()
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        await blogService.remove(blog.id)
-        dispatch(setBlogs([...blogs.filter((b) => b.id !== blog.id)]))
-        dispatch(
-          setTempMessage(
-            `Successfully removed blog ${blog.title}!`,
-            'success',
-            5000
-          )
-        )
-      } catch (exception) {
-        dispatch(setTempMessage('Could not delete blog', 'error', 5000))
-      }
+      dispatch(deleteBlog(blog))
     }
   }
 
