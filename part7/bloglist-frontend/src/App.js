@@ -1,21 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Link } from 'react-router-dom'
 import blogService from './services/blogs'
 import './index.css'
 import Blog from './components/Blog'
+import BlogDetails from './components/BlogDetails'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 import { setTempMessage } from './reducers/notificationReducer'
-import {
-  initializeBlogs,
-  deleteBlog,
-  createNewBlog,
-  likeBlog,
-} from './reducers/blogReducer'
+import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
 import {
   loginUser,
   logoutUser,
@@ -86,18 +82,6 @@ const App = () => {
     }
   }
 
-  const handleLike = (blog) => async (event) => {
-    event.preventDefault()
-    dispatch(likeBlog(blog))
-  }
-
-  const handleDelete = (blog) => async (event) => {
-    event.preventDefault()
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      dispatch(deleteBlog(blog))
-    }
-  }
-
   const blogList = () => (
     <>
       <Togglable buttonLabel={'create new'} ref={blogFormRef}>
@@ -115,22 +99,28 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleLike={handleLike(blog)}
-            showDelete={
-              blog.user && user.username && user.username === blog.user.username
-            }
-            handleDelete={handleDelete(blog)}
-          />
+          <Blog key={blog.id} blog={blog} />
         ))}
     </>
   )
 
   return (
     <div>
-      <h2>blogs</h2>
+      {user && (
+        <div className="header">
+          <Link className="header-item" to="/">
+            blogs
+          </Link>
+          <Link className="header-item" to="/users">
+            users
+          </Link>
+          <div className="header-item">{user.name} logged in</div>
+          <button className="header-item" onClick={handleLogout}>
+            logout
+          </button>
+        </div>
+      )}
+      <h2>blog app</h2>
       {notification.message && <Notification notification={notification} />}
       {user === null ? (
         <LoginForm
@@ -142,12 +132,11 @@ const App = () => {
         />
       ) : (
         <>
-          <button onClick={handleLogout}>logout</button>
-          <p>{user.name} logged in</p>
           <Routes>
             <Route path="/" element={blogList()} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/:id" element={<User />} />
+            <Route path="/blogs/:id" element={<BlogDetails />} />
           </Routes>
         </>
       )}

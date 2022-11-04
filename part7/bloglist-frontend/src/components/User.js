@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 const User = () => {
   const id = useParams().id
   const user = useSelector((state) => state.users.all.find((u) => u.id === id))
-  console.log(user)
   return user ? (
     <div>
       <h2>{user.name}</h2>

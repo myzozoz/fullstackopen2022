@@ -17,3 +17,12 @@
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.header {
+  background: lightgrey;
+  display: flex;
+}
+
+.header-item {
+  padding: 7px 7px;
+}

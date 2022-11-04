@@ -1,10 +1,7 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
-import BlogDetails from './BlogDetails'
+import { Link } from 'react-router-dom'
 
-const Blog = ({ blog, handleLike, showDelete, handleDelete }) => {
-  const [compact, setCompact] = useState(true)
-
+const Blog = ({ blog }) => {
   const blogStyle = {
     paddingTop: 6,
     paddingBottom: 6,
@@ -16,18 +13,10 @@ const Blog = ({ blog, handleLike, showDelete, handleDelete }) => {
   }
 
   return (
-    <div style={blogStyle} id="blog" className={'blog-class'}>
-      <div onClick={() => setCompact(!compact)}>
-        {blog.title} {blog.author} <button>{compact ? 'view' : 'hide'}</button>
-      </div>
-      {!compact && (
-        <BlogDetails
-          blog={blog}
-          handleLike={handleLike}
-          handleDelete={handleDelete}
-          showDelete={showDelete}
-        />
-      )}
+    <div style={blogStyle}>
+      <Link id="blog" className={'blog-class'} to={`/blogs/${blog.id}`}>
+        {blog.title} {blog.author}
+      </Link>
     </div>
   )
 }
@@ -45,9 +34,6 @@ Blog.propTypes = {
       username: PropTypes.string.isRequired,
     }),
   }),
-  handleLike: PropTypes.func.isRequired,
-  showDelete: PropTypes.bool,
-  handleDelete: PropTypes.func.isRequired,
 }
 
 export default Blog
