@@ -8,6 +8,7 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User'
 import { setTempMessage } from './reducers/notificationReducer'
 import {
   initializeBlogs,
@@ -146,6 +147,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={blogList()} />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<User />} />
           </Routes>
         </>
       )}
