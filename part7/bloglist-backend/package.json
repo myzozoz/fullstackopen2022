@@ -1,0 +1,38 @@
+{
+  "name": "fso22-blog-list",
+  "version": "1.0.0",
+  "description": "Part 4 of fso",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand --forceExit",
+    "start:test": "cross-env NODE_ENV=test node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myzozoz/fso22-blog-list.git"
+  },
+  "author": "make",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/myzozoz/fso22-blog-list/issues"
+  },
+  "homepage": "https://github.com/myzozoz/fso22-blog-list#readme",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.18.0",
+    "jest": "^28.1.1",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.2.4"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.1"
+  }
+}

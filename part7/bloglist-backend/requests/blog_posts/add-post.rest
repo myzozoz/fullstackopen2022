@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcmNlbCIsImlkIjoiNjM1ZmQzMjk5MjUzNzg3NGNjM2ZlMjllIiwiaWF0IjoxNjY3MjI0Mzg3fQ.s1gGq3xbwi0cog7XBadoikdFpzKcjFsXHEQr2B2ROeE
+
+{
+  "title": "Testblog1",
+  "author": "Make The Destroyer",
+  "url": "https://absolute-beaute.com",
+  "likes": 1
+}
