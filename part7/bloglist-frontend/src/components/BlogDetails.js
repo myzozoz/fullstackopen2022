@@ -8,8 +8,9 @@ const BlogDetails = () => {
   const navigate = useNavigate()
   const blog = useSelector((state) => state.blogs.find((b) => b.id === id))
   const user = useSelector((state) => state.users.current)
-  const showDelete =
-    blog.user && user && user.username && user.username === blog.user.username
+  if (!blog) return null
+
+  const showDelete = user && blog.user && user.username === blog.user.username
 
   const handleLike = (blog) => async (event) => {
     event.preventDefault()
@@ -36,6 +37,11 @@ const BlogDetails = () => {
       </div>
       <div>{blog.user && `added by ${blog.user.name}`}</div>
       {showDelete && <button onClick={handleDelete(blog)}>remove</button>}
+      <ul>
+        {blog.comments.map((c, i) => (
+          <li key={i}>{c}</li>
+        ))}
+      </ul>
     </>
   )
 }
