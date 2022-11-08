@@ -48,6 +48,21 @@ export const createNewBlog = (blog) => {
   }
 }
 
+export const createNewComment = (id, comment) => {
+  return async (dispatch) => {
+    const response = await blogService.createComment({ id, comment })
+
+    dispatch(setBlog(response))
+    dispatch(
+      setTempMessage(
+        `Successfully added comment '${comment}' to ${response.title}`,
+        'success',
+        5000
+      )
+    )
+  }
+}
+
 export const likeBlog = (blog) => {
   return async (dispatch) => {
     try {
