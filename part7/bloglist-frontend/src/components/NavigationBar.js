@@ -6,16 +6,25 @@ import { logoutUser } from '../reducers/userReducer'
 const NavBarContainer = styled.div`
   background: lightgrey;
   display: flex;
+  text-transform: uppercase;
+  justify-content: center;
 `
 const NavLink = styled(Link)`
   padding: 7px;
+  color: black;
+  text-decoration: none;
 `
 
 const NavLabel = styled.div`
   padding: 7px;
 `
 
-const NavButton = styled.button``
+const NavButton = styled.button`
+  background: darkgrey;
+  border: none;
+  cursor: pointer;
+  margin: 2px;
+`
 
 const NavigationBar = ({ user }) => {
   const dispatch = useDispatch()
