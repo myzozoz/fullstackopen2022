@@ -31,7 +31,7 @@ const BlogList = () => {
   }
   return (
     <>
-      <Togglable buttonLabel={'create new'} ref={blogFormRef}>
+      <Togglable buttonLabel={'Create new'} ref={blogFormRef}>
         <BlogForm
           handleBlogSubmit={handleBlogSubmit}
           handleTitleChange={({ target }) => setTitle(target.value)}

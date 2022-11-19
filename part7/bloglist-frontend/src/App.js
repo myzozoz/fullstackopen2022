@@ -12,9 +12,16 @@ import User from './components/User'
 import { initializeBlogs } from './reducers/blogReducer'
 import { loginUser, setUser, fetchAllUsers } from './reducers/userReducer'
 import BlogList from './components/BlogList'
+import colors from './helpers/color'
+
+const Background = styled.div`
+  background-color: ${(p) => p.bgColor || 'lightgrey'};
+  font-family: Arial, Helvetica, sans-serif;
+`
 
 const Container = styled.div`
-  max-width: 650px;
+  max-width: 800px;
+  margin: auto;
 `
 
 const App = () => {
@@ -48,29 +55,31 @@ const App = () => {
   }
 
   return (
-    <Container>
+    <Background bgColor={colors.platinum}>
       {user && <NavigationBar user={user} />}
-      <h2>blog app</h2>
-      {notification.message && <Notification notification={notification} />}
-      {user === null ? (
-        <LoginForm
-          handleSubmit={handleLogin}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          username={username}
-          password={password}
-        />
-      ) : (
-        <>
-          <Routes>
-            <Route path="/" element={<BlogList />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/users/:id" element={<User />} />
-            <Route path="/blogs/:id" element={<BlogDetails />} />
-          </Routes>
-        </>
-      )}
-    </Container>
+      <Container>
+        <h2>Blog app</h2>
+        {notification.message && <Notification notification={notification} />}
+        {user === null ? (
+          <LoginForm
+            handleSubmit={handleLogin}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            username={username}
+            password={password}
+          />
+        ) : (
+          <>
+            <Routes>
+              <Route path="/" element={<BlogList />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/users/:id" element={<User />} />
+              <Route path="/blogs/:id" element={<BlogDetails />} />
+            </Routes>
+          </>
+        )}
+      </Container>
+    </Background>
   )
 }
 
