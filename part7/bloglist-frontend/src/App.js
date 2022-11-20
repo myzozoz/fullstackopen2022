@@ -55,7 +55,7 @@ const App = () => {
   }
 
   return (
-    <Background bgColor={colors.platinum}>
+    <Background bgColor={colors.cultured}>
       {user && <NavigationBar user={user} />}
       <Container>
         <h2>Blog app</h2>

@@ -1,10 +1,16 @@
 import { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
 import Blog from './Blog'
 import { createNewBlog } from '../reducers/blogReducer'
 import { setTempMessage } from '../reducers/notificationReducer'
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 const BlogList = () => {
   const [title, setTitle] = useState('')
@@ -42,12 +48,13 @@ const BlogList = () => {
           url={url}
         />
       </Togglable>
-
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
+      <Container>
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+      </Container>
     </>
   )
 }

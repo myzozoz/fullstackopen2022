@@ -1,23 +1,39 @@
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import colors from '../helpers/color'
+
+const LinkCard = styled(Link)`
+  padding: 6px 4px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 3px ${(p) => p.shadowColor || 'black'};
+  cursor: pointer;
+  background-color: ${(p) => p.bgColor || 'lightgrey'};
+  text-decoration: none;
+`
+
+const Title = styled.span`
+  color: ${(p) => p.textColor || 'black'};
+  text-transform: uppercase;
+`
+
+const Author = styled.span`
+  color: ${(p) => p.textColor || 'black'};
+`
 
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-    cursor: 'pointer',
-  }
-
   return (
-    <div style={blogStyle}>
-      <Link id="blog" className={'blog-class'} to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
-      </Link>
-    </div>
+    <LinkCard
+      id="blog"
+      className={'blog-class'}
+      to={`/blogs/${blog.id}`}
+      bgColor={colors.platinum}
+      shadowColor={colors.jet}
+    >
+      <Title textColor={colors.black}>{blog.title}</Title>
+      <Author textColor={colors.jet}> - {blog.author}</Author>
+    </LinkCard>
   )
 }
 
