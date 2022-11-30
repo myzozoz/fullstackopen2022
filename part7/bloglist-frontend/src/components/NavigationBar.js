@@ -5,8 +5,8 @@ import { logoutUser } from '../reducers/userReducer'
 import colors from '../helpers/color'
 
 const NavBarContainer = styled.div`
-  background: ${(p) => p.bgColor || 'lightgrey'};
-  box-shadow: 0 1px 3px ${(p) => p.shadowColor || 'black'};
+  background: ${(p) => (p.colors ? p.colors.jet : 'black')};
+  box-shadow: 0 1px 3px ${(p) => (p.colors ? p.colors.jet : 'black')};
 `
 
 const HorizontalLimit = styled.div`
@@ -18,12 +18,12 @@ const HorizontalLimit = styled.div`
 const Divider = styled.div`
   margin: 5px 0;
   width: 1px;
-  background-color: black;
+  background-color: ${(p) => (p.colors ? p.colors.platinum : 'white')};
 `
 
 const NavLink = styled(Link)`
   padding: 7px;
-  color: black;
+  color: ${(p) => (p.colors ? p.colors.platinum : 'white')};
   text-decoration: none;
   font-weight: bold;
   text-transform: uppercase;
@@ -32,6 +32,7 @@ const LogoutContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-left: auto;
+  color: ${(p) => (p.colors ? p.colors.platinum : 'white')};
 `
 
 const NameLabel = styled.div`
@@ -45,8 +46,12 @@ const LoggedInText = styled.div`
 `
 
 const LogoutButton = styled.button`
-  background: ${(p) => p.bgColor || 'lightgrey'};
-  border: none;
+  background-color: ${(p) => (p.colors ? p.colors.orangeWeb : 'white')};
+  border-color: ${(p) => (p.colors ? p.colors.tangerine : 'black')};
+  border-radius: 3px;
+  color: ${(p) => (p.colors ? p.colors.jet : 'black')};
+  font-weight: bold;
+  box-shadow: 0 0 3px ${(p) => (p.colors ? p.colors.jet : 'black')};
   cursor: pointer;
   margin: 6px;
 `
@@ -61,27 +66,23 @@ const NavigationBar = ({ user }) => {
     dispatch(logoutUser())
   }
   return (
-    <NavBarContainer
-      className="navigation"
-      bgColor={colors.lightSeaGreen}
-      shadowColor={colors.jet}
-    >
+    <NavBarContainer className="navigation" colors={colors}>
       <HorizontalLimit>
         <Divider />
-        <NavLink className="navigation-item" to="/">
+        <NavLink colors={colors} to="/">
           blogs
         </NavLink>
         <Divider />
-        <NavLink className="navigation-item" to="/users">
+        <NavLink colors={colors} to="/users">
           users
         </NavLink>
-        <LogoutContainer>
-          <NameLabel className="navigation-item">{user.name + ' '}</NameLabel>
+        <LogoutContainer colors={colors}>
+          <NameLabel>{user.name + ' '}</NameLabel>
           <LoggedInText>logged in</LoggedInText>
           <LogoutButton
             className="navigation-item"
             onClick={handleLogout}
-            bgColor={colors.orangeWeb}
+            colors={colors}
           >
             {'Logout ->'}
           </LogoutButton>

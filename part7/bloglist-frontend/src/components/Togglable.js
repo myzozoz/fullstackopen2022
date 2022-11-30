@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import colors from '../helpers/color'
 
 const Button = styled.button`
-  background-color: ${(p) => p.bgColor || 'white'};
-  border-color: ${(p) => p.borderColor || 'black'};
+  background-color: ${(p) => (p.colors ? p.colors.orangeWeb : 'white')};
+  border-color: ${(p) => (p.colors ? p.colors.tangerine : 'black')};
   border-radius: 3px;
-  color: ${(p) => p.textColor || 'black'};
+  color: ${(p) => (p.colors ? p.colors.jet : 'black')};
   font-weight: bold;
-  box-shadow: 0 0 3px ${(p) => p.shadowColor || 'black'};
+  box-shadow: 0 0 3px ${(p) => (p.colors ? p.colors.jet : 'black')};
 `
 
 const Container = styled.div`
@@ -35,19 +35,15 @@ const Togglable = forwardRef((props, ref) => {
   return (
     <Container>
       <div style={hideWhenVisible}>
-        <Button
-          onClick={toggleVisibility}
-          bgColor={colors.orangeWeb}
-          borderColor={colors.tangerine}
-          textColor={colors.jet}
-          shadowColor={colors.jet}
-        >
+        <Button onClick={toggleVisibility} colors={colors}>
           {props.buttonLabel}
         </Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button onClick={toggleVisibility} colors={colors}>
+          Cancel
+        </Button>
       </div>
     </Container>
   )

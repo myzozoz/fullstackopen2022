@@ -4,6 +4,7 @@ const colors = {
   jet: '#272727',
   cultured: '#FAFAFA',
   lightSeaGreen: '#00A6A6',
+  lightBlue: '#53E6E6',
   orangeWeb: '#F49F0A',
   tangerine: '#F08700',
 }

@@ -7,19 +7,19 @@ const LinkCard = styled(Link)`
   padding: 6px 4px;
   border-radius: 3px;
   margin-bottom: 10px;
-  box-shadow: 0 0 3px ${(p) => p.shadowColor || 'black'};
+  box-shadow: 0 0 3px ${(p) => (p.colors ? p.colors.jet : 'black')};
   cursor: pointer;
-  background-color: ${(p) => p.bgColor || 'lightgrey'};
+  background-color: ${(p) => (p.colors ? p.colors.platinum : 'lightgrey')};
   text-decoration: none;
 `
 
 const Title = styled.span`
-  color: ${(p) => p.textColor || 'black'};
+  color: ${(p) => (p.colors ? p.colors.jet : 'black')};
   text-transform: uppercase;
 `
 
 const Author = styled.span`
-  color: ${(p) => p.textColor || 'black'};
+  color: ${(p) => (p.colors ? p.colors.jet : 'black')};
 `
 
 const Blog = ({ blog }) => {
@@ -28,11 +28,10 @@ const Blog = ({ blog }) => {
       id="blog"
       className={'blog-class'}
       to={`/blogs/${blog.id}`}
-      bgColor={colors.platinum}
-      shadowColor={colors.jet}
+      colors={colors}
     >
-      <Title textColor={colors.black}>{blog.title}</Title>
-      <Author textColor={colors.jet}> - {blog.author}</Author>
+      <Title colors={colors}>{blog.title}</Title>
+      <Author colors={colors}> - {blog.author}</Author>
     </LinkCard>
   )
 }

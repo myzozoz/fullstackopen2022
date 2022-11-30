@@ -22,6 +22,11 @@ const Background = styled.div`
 const Container = styled.div`
   max-width: 800px;
   margin: auto;
+  padding: 0 5px;
+`
+
+const Title = styled.h2`
+  color: ${(p) => (p.colors ? p.colors.jet : 'black')};
 `
 
 const App = () => {
@@ -58,7 +63,7 @@ const App = () => {
     <Background bgColor={colors.cultured}>
       {user && <NavigationBar user={user} />}
       <Container>
-        <h2>Blog app</h2>
+        <Title colors={colors}>Blog app</Title>
         {notification.message && <Notification notification={notification} />}
         {user === null ? (
           <LoginForm
