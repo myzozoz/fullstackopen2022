@@ -25,7 +25,7 @@ const Container = styled.div`
   padding: 0 5px;
 `
 
-const Title = styled.h2`
+const Title = styled.h1`
   color: ${(p) => (p.colors ? p.colors.jet : 'black')};
 `
 
